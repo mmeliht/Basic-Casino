@@ -4,35 +4,39 @@
 fl FileReader()
 {
     fl f;
-    f.file = fopen("doc/Kisiler.txt", "r");
-
-    while (fgets(f.line, f.maxLen, f.file))
+    Ks k;
+    char satir[255];
+    FILE *dosya = fopen("./doc/Kisiler.txt", "r");
+    while (fgets(satir, 255, dosya))
     {
-        printf("satir: %s\n", f.line);
+        printf("satir: %s\n", satir);
+        char *parca;
 
-        f.part = strtok(f.line, "#");
+        parca = strtok(satir, "#");
 
-        int partIndex = 0;
-        while (f.part != NULL)
+        int parcaIndex = 0;
+
+        while (parca != NULL)
         {
-            partIndex++;
-            /*if (partIndex == 1)
-                f.spoofName[partIndex] = atoi(f.part);
-                */
-            if (partIndex == 2)
-                f.spoofMoney = atoi(f.part);
-            else if (partIndex == 3)
-                f.spoofRate = atoi(f.part);
-            else if (partIndex == 4)
-                f.spoofNumber = atoi(f.part);
-            else
-                printf("%s", "Hata");
-
-            f.part = strtok(NULL, " ");
-            Ks k = AddPerson(f.spoofMoney, f.spoofRate, f.spoofNumber);
+            parcaIndex++;
+            if(parcaIndex%4==1)
+            {
+                
+                printf("isim: %s\n", parca);
+            }
+            else if(parcaIndex%4==2)
+            {
+                k.money=atof(parca);
+                printf("para: %.2f\n", k.money);
+            }
+            else if(parcaIndex%4==3)
+            {
+                printf("oran: %s\n", parca);
+            }
+            else printf("oynadigi sayi:%s\n",parca);
+            parca = strtok(NULL, "#");
+            
         }
     }
-
-    fclose(f.file);
     return f;
 }
