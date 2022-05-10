@@ -1,42 +1,64 @@
-#include "Dosya.h"
-#include "Kisiler.h"
+#include "../include/Dosya.h" 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-fl FileReader()
-{
-    fl f;
-    Ks k;
-    char satir[255];
-    FILE *dosya = fopen("./doc/Kisiler.txt", "r");
-    while (fgets(satir, 255, dosya))
-    {
-        printf("satir: %s\n", satir);
-        char *parca;
+Oyun SayilariOku(Dosya d){
+	Oyun o;
+	o.MasaParasi=0;
+	FILE* f = fopen(d.DosyaAdi,d.islem);
+	int sayac = 0,t;
+	while(!feof(f)){
+		fscanf(f,"%d\n",&t);
+		sayac++;
+	}
+	rewind(f);
+	int* dizi = (int*) malloc(sizeof(int)*(sayac+1));
+	int i=0;
+	while(!feof(f)){
+		fscanf(f,"%d\n",&o.sayilar[i]);
+		i++;
+	} 
+	o.sayiAdeti = i;
+	fclose(f);
+	return o;
+}
 
-        parca = strtok(satir, "#");
+Kisi* KisileriOku(Dosya d){
+	int kisiSayisi = KisiSayisi(d);
+	Kisi *kisiler = (Kisi*)malloc(sizeof(Kisi)*kisiSayisi);
+	int i=0;
+	FILE* f = fopen(d.DosyaAdi,d.islem);
+	char buf[1000],temp[1000];
+	char* deger;
+	const char ayrac[2] = "#";
+	while(!feof(f)){
+		fscanf(f,"%[^\n]\n",buf);
+		strcpy(temp,buf);
+		deger = strtok(temp,ayrac);
+		strcpy(kisiler[i].AdSoyad,deger);
+		deger = strtok(NULL,ayrac);
+		kisiler[i].Para = atof(deger);
+		deger = strtok(NULL,ayrac);
+		kisiler[i].TurPara = atof(deger);
+		deger = strtok(NULL,ayrac);
+		kisiler[i].Sayi = atoi(deger);
+		i++;
+	}
+	fclose(f);
+	return kisiler;
+}
 
-        int parcaIndex = 0;
-
-        while (parca != NULL)
-        {
-            parcaIndex++;
-            if(parcaIndex%4==1)
-            {
-                
-                printf("isim: %s\n", parca);
-            }
-            else if(parcaIndex%4==2)
-            {
-                k.money=atof(parca);
-                printf("para: %.2f\n", k.money);
-            }
-            else if(parcaIndex%4==3)
-            {
-                printf("oran: %s\n", parca);
-            }
-            else printf("oynadigi sayi:%s\n",parca);
-            parca = strtok(NULL, "#");
-            
-        }
-    }
-    return f;
+int KisiSayisi(Dosya d){
+	FILE* f = fopen(d.DosyaAdi,d.islem);
+	int sayac = 0;
+	char buf;
+	while(!feof(f)){
+		fscanf(f,"%c",&buf);
+		if(buf == '\n'){
+			sayac++;
+		}
+	}
+	fclose(f);
+	return sayac-1;
 }

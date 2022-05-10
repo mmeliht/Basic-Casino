@@ -1,10 +1,9 @@
-hepsi: derle calistir
+all: debug run
 
-derle:
-	gcc -o ./lib/jval.o -c ./src/jval.c
-	gcc -o ./lib/dllist.o -c ./src/dllist.c
-	gcc -o ./lib/Kisiler.o -c ./src/kisiler.c
-	gcc -o ./lib/Dosya.o -c ./src/dosya.c
-	gcc -o ./bin/test ./lib/jval.o ./lib/dllist.o ./lib/Kisiler.o ./lib/Dosya.o ./src/Test.c
-calistir:
+debug:
+	gcc -o ./lib/Kisi.o -c ./src/Kisi.c
+	gcc -o ./lib/Oyun.o -c ./src/Oyun.c
+	gcc -o ./lib/Dosya.o -c ./src/Dosya.c
+	gcc -o ./bin/test ./lib/Kisi.o ./lib/Oyun.o ./lib/Dosya.o ./src/test.c
+run:
 	bin/test
